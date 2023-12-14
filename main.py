@@ -1,9 +1,19 @@
-from ai.completion.zeroshotutility import zeroshotutility
-from ai.prompts.zeroshot import zeroshot
+from ai.completion.fewshotutility import fewshotutility
+from ai.prompts.fewshot import fewshot
 
 if __name__ == '__main__':
-    prompt_template = zeroshot.get_prompt_template()
+    examples = fewshot.FewShot.get_examples()
+    prefix = fewshot.FewShot.get_prefix()
+    suffix = fewshot.FewShot.get_suffix()
+    example_template, example_variables = fewshot.FewShot.get_example_template()
 
-    zeroShot = zeroshotutility.ZeroShotUtility(template=prompt_template)
+    fewShot = fewshotutility.FewShotUtility(examples=examples,
+                                            prefix=prefix,
+                                            suffix=suffix,
+                                            input_variables=["question"],
+                                            example_template=example_template,
+                                            example_variables=example_variables
+                                            )
     question = "How to reach Jersey City from Hoboken?"
-    zeroShot.print_travel_modes(question=question)
+    prompt = fewShot.get_prompt(question)
+    fewShot.print_travel_modes(prompt)
